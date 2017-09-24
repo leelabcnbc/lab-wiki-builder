@@ -1,1 +1,1 @@
-multi-line, non-confidential, description of this exp. this part will NOT show in BibBase widget.
+multi-line, confidential, description of this exp. this part will NOT show in BibBase widget.
