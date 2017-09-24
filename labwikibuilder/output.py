@@ -3,13 +3,16 @@ from collections import OrderedDict
 from .utils import _get_full_path
 import markdown
 from urllib.parse import quote_plus
+from json import dumps
 
 
-def _get_top_source_in_md(key, source_url_root):
+def _get_top_source_in_md(key, source_url_root, title_to_use=None):
     if not source_url_root.endswith('/'):
         source_url_root += '/'
     # this should be a pair, of key, notebook name.
-    return '[' + _get_title(key) + ']' + '(' + source_url_root + '/'.join(key) + ')'
+    if title_to_use is None:
+        title_to_use = _get_title(key)
+    return '[' + title_to_use + ']' + '(' + source_url_root + '/'.join(key) + ')'
 
 
 def _get_source_in_md(source, source_url_root):
@@ -24,8 +27,33 @@ def _get_title(key):
     return '/'.join(key) if key != () else '(ROOT)'
 
 
+def _tree_pretty_print(folder_tree, website_root, key_front):
+    # first print root.
+    bag_of_lines = []
+    # this ':-1' also works when key_front is (), and it will return ().
+    bag_of_lines.append('Back to {}\n'.format(_get_top_source_in_md(key_front[:-1], website_root)))
+    # then for each thing in folder tree, do a recursion.
+    _tree_pretty_print_inner(
+        folder_tree, website_root, key_front, indent=0, bag_of_lines=bag_of_lines
+    )
+
+    return '\n'.join(bag_of_lines) + '\n'
+
+
+def _tree_pretty_print_inner(folder_tree, website_root, key_front, indent, bag_of_lines):
+    for key, value in folder_tree.items():
+        bag_of_lines.append(
+            ' ' * indent + '* ' + _get_top_source_in_md(key_front + (key,), website_root, title_to_use=key)
+        )
+        if value != {}:
+            # then recursion.
+            _tree_pretty_print_inner(
+                value, website_root, key_front + (key,), indent=indent + 4, bag_of_lines=bag_of_lines
+            )
+
+
 def _output_info_one_key(root_dir, key, info_this_key,
-                         website_root, source_url_root, name):
+                         website_root, source_url_root, name, folder_tree=None):
     full_path_this_key = _get_full_path(root_dir, key)
     bib_full_path = os.path.join(full_path_this_key, 'bib.bib')
     assert not os.path.exists(bib_full_path), f'{bib_full_path} exists'
@@ -45,6 +73,13 @@ def _output_info_one_key(root_dir, key, info_this_key,
     md_all.append(
         f"# {name}: {html_title}"
     )
+
+    # here, I need to add a tree.
+    md_all.append('## subtree starting from this level\n')
+    md_all.append(
+        _tree_pretty_print(folder_tree, website_root, key)
+    )
+    md_all.append('## entries under this level\n')
     md_all.append(
         "If notebook doesn't look right, try adding `?flush_cache=true`, as discussed [here](http://nbviewer.jupyter.org/faq#i-want-to-removeupdate-a-notebook-from-notebook-viewer)\n")
     for s_top_level in source_top_level:
