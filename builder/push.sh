@@ -9,9 +9,17 @@ setup_git() {
 
 setup_backup() {
   rm -rf ~/lab-wiki-gh-pages
-  mkdir -p ~/lab-wiki-gh-pages
+  mkdir -p ~/lab-wiki-gh-pages/demo_proj
   # copy output.
-  cp -af output/. ~/lab-wiki-gh-pages
+  cp -af output/demo_proj/. ~/lab-wiki-gh-pages/demo_proj
+
+
+  mkdir -p ~/lab-wiki-gh-pages/demo_ref
+  # copy src, as I need those files for ipynb as well.
+  cp -af src/demo_ref/. ~/lab-wiki-gh-pages/demo_ref
+
+  # touch a nojekyll
+  touch ~/lab-wiki-gh-pages/.nojekyll
 }
 
 commit_website_files() {

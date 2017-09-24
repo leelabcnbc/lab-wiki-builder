@@ -9,7 +9,7 @@ dependencies:
 test:
   override:
     - ./lab_wiki_builder.py --proj src/demo_proj output/demo_proj
-    #TODO: ref library demo.
+    - ./lab_wiki_builder.py --ref src/demo_ref src/demo_ref
 
 deployment:
   staging:

@@ -1,0 +1,7 @@
+{
+  "website_root": "https://leelabcnbc.github.io/lab-wiki-builder/demo_ref",
+  "source_url_root": "https://nbviewer.jupyter.org/url/leelabcnbc.github.io/lab-wiki-builder/demo_ref",
+  "subdirs": {
+    "Demo Reference Library": "."
+  }
+}
