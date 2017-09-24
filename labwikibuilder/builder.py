@@ -32,7 +32,7 @@ def builder(cmd_params, rc_params):
                                              name, options=options)
         summary_dict_all[name] = summary_this
 
-    with open(os.path.join(input_root, 'summary.json'), 'w', encoding='utf-8') as f_out:
+    with open(os.path.join(output_root, 'summary.json'), 'w', encoding='utf-8') as f_out:
         json.dump(summary_dict_all, f_out, indent=2)
 
 
@@ -57,5 +57,6 @@ def _normalize_cmd_params(cmd_params):
 def build_ref_lib_wrapper(input_root, output_root, website_root, source_url_root,
                           name, options=None):
     # for now, let's only work on trivial case.
-    assert output_root == input_root
-    return build_ref_lib(input_root, website_root, source_url_root, name, options=options)
+    # assert output_root == input_root
+    return build_ref_lib(input_root, website_root, source_url_root, name, options=options,
+                         output_root=output_root)

@@ -35,15 +35,21 @@ for the necessity of doing all the "non-science" management stuffs, specifically
 
 ## how to use it.
 
-~~~bash
-python ./lab_wiki_builder.py [-h] (--ref|--proj) input output
 ~~~
+usage: lab_wiki_builder.py [-h] (--ref | --proj) input [output]
 
-* `-h` or `--help` show help.
-* `--ref` build reference library.
-* `--proj` build project library.
-* `input` the root directory of library source files.
-* `output` optional. the root directory of library output files. If not set, it will be equal to `input`.
+build lab wiki website.
+
+positional arguments:
+  input       the root directory of library source files.
+  output      the root directory of library output files. If not set, it will
+              be equal to `input`.
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --ref       build reference library.
+  --proj      build project library.
+~~~
 
 ## how it works
 

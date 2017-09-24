@@ -5,7 +5,11 @@ from .utils import build_folder_tree, _iterate_tree_part
 
 
 def build_ref_lib(lib_root, website_root,
-                  source_url_root, name, options=None):
+                  source_url_root, name, options=None,
+                  output_root=None):
+    if output_root is None:
+        output_root = lib_root
+
     assert options is not None
 
     if options == {'reference_library': True, 'project_library': False}:
@@ -22,7 +26,7 @@ def build_ref_lib(lib_root, website_root,
     folder_tree = build_folder_tree(set(info_dict.keys()))
     for key, info_this_key in info_dict.items():
         # then traverse it.
-        _output_info_one_key(lib_root, key, info_this_key, website_root,
+        _output_info_one_key(output_root, key, info_this_key, website_root,
                              source_url_root, name, folder_tree=_iterate_tree_part(folder_tree, key))
     summary_dict = get_summary_from_info_dict(info_dict)
     return summary_dict

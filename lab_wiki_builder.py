@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """this is the main file for lab wiki builder. it only parses arguments and then pass all arguments in to the
 actual underlying function"""
 

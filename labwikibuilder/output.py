@@ -55,6 +55,10 @@ def _tree_pretty_print_inner(folder_tree, website_root, key_front, indent, bag_o
 def _output_info_one_key(root_dir, key, info_this_key,
                          website_root, source_url_root, name, folder_tree=None):
     full_path_this_key = _get_full_path(root_dir, key)
+
+    # then create this dir if needed
+    os.makedirs(full_path_this_key, exist_ok=True)
+
     bib_full_path = os.path.join(full_path_this_key, 'bib.bib')
     assert not os.path.exists(bib_full_path), f'{bib_full_path} exists'
     html_full_path = os.path.join(full_path_this_key, 'index.html')
