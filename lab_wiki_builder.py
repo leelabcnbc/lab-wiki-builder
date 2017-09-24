@@ -2,9 +2,13 @@
 actual underlying function"""
 
 import argparse
-from json import load
 import os.path
+from json import load
+from sys import version_info
+
 from labwikibuilder import builder
+
+assert version_info >= (3, 6), "Python 3.6 or later to run this program!"
 
 
 def main():
