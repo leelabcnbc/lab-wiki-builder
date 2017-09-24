@@ -33,3 +33,31 @@ logistic overheads of lab management in the following aspects.
 In addition, [this page](https://rrcns.readthedocs.io) gives a set of reasons
 for the necessity of doing all the "non-science" management stuffs, specifically for neurophysiology labs.
 
+## how to use it.
+
+~~~bash
+python ./lab_wiki_builder.py [-h] (--ref|--proj) input output
+~~~
+
+* `-h` or `--help` show help.
+* `--ref` build reference library.
+* `--proj` build project library.
+* `input` the root directory of library source files.
+* `output` optional. the root directory of library output files. If not set, it will be equal to `input`.
+
+## how it works
+
+It's actually quite simple.
+
+1. Go through every **eligible** folder under `INPUT`.
+    * `eligible` means the following. Suppose a folder is `INPUT/A/B/C`, then
+       1. Starting from root, each level (`A`,`B`,`C`) must only contain digits,
+          lowercase letters, or `_`, and must not start with `_`.
+2. Under each eligible folder, we will scan every **entry file** to collect information needed for library building.
+    * `entry file` means different things for different building options.
+       1. for `--ref`, it means all `.ipynb` files
+       2. for `--proj`, it means all the `.md` files.
+    * the entry files should only have letters, digits, `_` and `-` in their names,
+      and their extensions must be lowercase.
+3. Using all the collected information, the program builds the library.
+
