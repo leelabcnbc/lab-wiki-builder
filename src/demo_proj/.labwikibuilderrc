@@ -1,0 +1,7 @@
+{
+  "website_root": "https://leelabcnbc.github.io/lab-wiki-builder/demo_proj",
+  "source_url_root": "https://github.com/leelabcnbc/lab-wiki-builder/tree/master/src/demo_proj",
+  "subdirs": {
+    "Demo Project Library": "."
+  }
+}

@@ -1,12 +1,11 @@
 """this file handles the reference library specific part"""
 
-from sys import version_info
-import re
-import os
 import json
+import os
+import re
+
 import pybtex.database
 
-assert version_info >= (3, 6), "Python 3.6 or later to run this program!"
 from .utils import _additional_cats_closure
 
 # use '?' for non-greedy.
@@ -31,9 +30,6 @@ def _process_one_file(key, f, info_this_key):
                 bib_raw = x[4:-3]
                 bib_database = pybtex.database.parse_string(bib_raw, 'bibtex')
 
-                # for entry in bib_database.entries.values():
-                #     print(entry.key)
-                # TODO: explicitly display what got duplicated.
                 assert len(bib_database.entries) == 1, 'you must have single bib entry each time!'
                 entry_this = bib_database.entries[bib_database.entries.keys()[0]]
                 # then let's get ID.

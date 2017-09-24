@@ -1,0 +1,22 @@
+machine:
+  python:
+    version: 3.6.2
+
+dependencies:
+  override:
+    - pip install -r requirements.txt
+
+test:
+  override:
+    - ./lab_wiki_builder.py --proj src/demo_proj output/demo_proj
+    #TODO: ref library demo.
+
+deployment:
+  staging:
+    branch: ci
+    commands:
+      - builder/push.sh 1
+  deploy:
+    branch: master
+    commands:
+      - builder/push.sh 0

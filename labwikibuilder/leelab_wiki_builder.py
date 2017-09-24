@@ -1,4 +1,5 @@
 from .entry_file_ref import _dispatch_handle as _dispatch_handle_ref
+from .entry_file_proj import _dispatch_handle as _dispatch_handle_proj
 from .input import collect_bib_info
 from .output import _output_info_one_key, get_summary_from_info_dict
 from .utils import build_folder_tree, _iterate_tree_part
@@ -16,7 +17,7 @@ def build_ref_lib(lib_root, website_root,
         # get the process file handle
         dispatch_handle = _dispatch_handle_ref
     elif options == {'reference_library': False, 'project_library': True}:
-        dispatch_handle = _dispatch_handle_ref
+        dispatch_handle = _dispatch_handle_proj
     else:
         raise ValueError('invalid option {}'.format(options))
 

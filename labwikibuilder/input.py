@@ -47,6 +47,7 @@ def _process_one_key(key, files, all_info_dict, dirpath, dispatch_handle=None):
             print(f'process {file_full}')
             _process_one_file(key, file_full, bib_info_this_key)
     bib_keys = {x[0] for x in bib_info_this_key}
+    # TODO: explicitly display what got duplicated.
     assert len(bib_keys) == len(bib_info_this_key), "non unique keys!"
     bib_info_this_key = OrderedDict(bib_info_this_key)
     # for x, y in bib_info_this_key.items():
