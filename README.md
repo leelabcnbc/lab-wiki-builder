@@ -33,6 +33,11 @@ logistic overheads of lab management in the following aspects.
 In addition, [this page](https://rrcns.readthedocs.io) gives a set of reasons
 for the necessity of doing all the "non-science" management stuffs, specifically for neurophysiology labs.
 
+## demos
+
+* [Demo reference library](https://leelabcnbc.github.io/lab-wiki-builder/demo_ref/)
+* [Demo project library](https://leelabcnbc.github.io/lab-wiki-builder/demo_proj/)
+
 ## how to use it.
 
 ~~~
