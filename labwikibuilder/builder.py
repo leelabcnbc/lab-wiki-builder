@@ -11,7 +11,7 @@ def builder(cmd_params, rc_params):
 
     # check rc_params
     #
-    input_root, output_root, options = _normalize_cmd_params(cmd_params)
+    input_root, output_root, options, summary_file_name = _normalize_cmd_params(cmd_params)
     subdirs, website_root, source_url_root = _normalize_input_rc_params(rc_params)
 
     # ok, let's work through subdirs one by one.
@@ -32,7 +32,7 @@ def builder(cmd_params, rc_params):
                                              name, options=options)
         summary_dict_all[name] = summary_this
 
-    with open(os.path.join(output_root, 'summary.json'), 'w', encoding='utf-8') as f_out:
+    with open(os.path.join(output_root, summary_file_name), 'w', encoding='utf-8') as f_out:
         json.dump(summary_dict_all, f_out, indent=2)
 
 
@@ -51,7 +51,8 @@ def _normalize_cmd_params(cmd_params):
         output_root = input_root
     options = {'reference_library': cmd_params.ref,
                'project_library': cmd_params.proj}
-    return input_root, output_root, options
+    summary_file_name = cmd_params.sum_file
+    return input_root, output_root, options, summary_file_name
 
 
 def build_ref_lib_wrapper(input_root, output_root, website_root, source_url_root,
