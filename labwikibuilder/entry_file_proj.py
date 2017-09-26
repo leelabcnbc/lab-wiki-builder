@@ -19,6 +19,7 @@ def _process_meta(f):
         'keywords': None,
         # no additional category
         'additional-categories': None,
+        'url': None,
     }
     # then let's construct the meta info dict.
     info_this = dict()
@@ -35,7 +36,7 @@ def _process_meta(f):
         if default_key not in info_this:
             info_this[default_key] = default_value
     assert info_this.keys() == {'title', 'author', 'year',
-                                'keywords', 'additional-categories',
+                                'keywords', 'additional-categories', 'url',
                                 'finished'}
     assert isinstance(info_this['finished'], bool)
     # this will show up in BibBase widget.
