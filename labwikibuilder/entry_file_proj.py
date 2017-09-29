@@ -13,8 +13,8 @@ def _process_meta(f):
         data = frontmatter.load(data_file)
 
     default_result = {
-        # by default, finished.
-        'finished': True,
+        # by default, NOT finished.
+        'finished': False,
         # no keywords
         'keywords': None,
         # no additional category
