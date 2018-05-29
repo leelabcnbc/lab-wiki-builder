@@ -1,0 +1,57 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6.5
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: sudo pip install -r requirements.txt
+      - run:
+          name: build project library
+          command: ./lab_wiki_builder.py --proj src/demo_proj output/demo_proj
+      - run:
+          name: build reference library
+          command: ./lab_wiki_builder.py --ref src/demo_ref src/demo_ref
+      - persist_to_workspace:
+          root: /home/circleci
+          paths:
+            - project  # this is the default working dir. see https://circleci.com/docs/2.0/configuration-reference/#job_name
+
+  staging:
+    docker:
+      - image: circleci/python:3.6.5
+    steps:
+      - attach_workspace:
+          at: /home/circleci
+      - deploy:
+          command: builder/push.sh 1
+
+  deploy:
+    docker:
+      - image: circleci/python:3.6.5
+    steps:
+      - attach_workspace:
+          at: /home/circleci
+      - deploy:
+          command: builder/push.sh 0
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - staging:
+          requires:
+            - build
+          filters:
+            branches:
+              only: ci
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
