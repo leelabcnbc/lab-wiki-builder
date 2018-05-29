@@ -1,0 +1,18 @@
+{
+  "Demo Reference Library": {
+    "computer_vision/analysis_visualization/notes.ipynb": [
+      "Berkes:2006el",
+      "Szegedy:2013vw",
+      "Zeiler:2014fr"
+    ],
+    "computer_vision/caption_generation/notes.ipynb": [
+      "Xu:2015ut"
+    ],
+    "machine_learning/kernel/notes.ipynb": [
+      "Grauman:2005iu"
+    ],
+    "machine_learning/learning_theory/deep_learning.ipynb": [
+      "Zhang:2016ve"
+    ]
+  }
+}

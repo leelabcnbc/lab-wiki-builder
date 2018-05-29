@@ -1,0 +1,47 @@
+@article{Xu:2015ut,
+author = {Xu, Kevin and Ba, Jimmy Lei and Kiros, Ryan and Cho, Kyunghyun and Courville, Aaron and Salakhutdinov, Ruslan and Zemel, Richard S and Bengio, Yoshua},
+title = {{Show, Attend and Tell: Neural Image Caption Generation with Visual Attention}},
+journal = {ArXiv e-prints},
+year = {2015},
+volume = {cs.LG},
+month = feb,
+annote = {Great application of "attention" to image captioning.
+
+Notice that where to attend is not supervised, just like the case in CTC.
+
+CS231n says that one problem with this work is the resolution of attention. Maybe can be addressed using per pixel hypercolumn features, after upsampling.
+
+pp. 4.
+
+Check CS231n for the notation, notice that I think here T should be $T_{D+m+n, 4n}$.
+
+Section 4.1 Hard attention.
+
+This version is learned by maximizing lower bound. In Eq. (11), s is a vector of all choices along time. and to learn this, we need sampling.
+
+in pp.5, there are some further refinements on optimization. Maybe these are just some tricks in MCMC. anyway.
+
+Section 4.2 soft attention.
+
+pp. 6
+
+most of left column is about connection between soft and hard versions. Ignored.
+
+
+Section 4.2.1 Doubly Stochastic Attention.
+
+No idea why across time, the alpha should sum to 1 for each location. See <https://github.com/kelvinxu/arctic-captions/issues/38> and <https://www.reddit.com/r/MachineLearning/comments/2vjdcw/show_attend_and_tell_neural_image_caption/cok4yc9/>. Maybe it just worked, whatsoever.
+
+In addition, that \beta stuff might be some hack that emprically helps.
+
+},
+keywords = {deep learning, recurrent},
+read = {Yes},
+rating = {5},
+date-added = {2017-02-21T16:11:00GMT},
+date-modified = {2017-02-23T19:57:09GMT},
+url = {http://arxiv.org/abs/1502.03044},
+local-url = {file://localhost/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2015/Xu/arXiv%202015%20Xu.pdf},
+file = {{arXiv 2015 Xu.pdf:/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2015/Xu/arXiv 2015 Xu.pdf:application/pdf}},
+uri = {\url{papers3://publication/uuid/881D0A60-2E59-477D-814F-5E8908F34D89}}
+}

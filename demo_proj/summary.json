@@ -1,0 +1,16 @@
+{
+  "Demo Project Library": {
+    "computer_vision/deep_learning/_horizontal_connection_cnn": [
+      "horizontal_connection_cnn"
+    ],
+    "management/_lab-wiki-builder": [
+      "lab-wiki-builder"
+    ],
+    "monkey_experiments/data_collection/_monkey_exp_1": [
+      "monkey_exp_1"
+    ],
+    "monkey_experiments/data_collection/_monkey_exp_2": [
+      "monkey_exp_2"
+    ]
+  }
+}

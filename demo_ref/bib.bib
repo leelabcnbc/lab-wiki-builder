@@ -1,0 +1,291 @@
+@inproceedings{Zeiler:2014fr,
+author = {Zeiler, Matthew D and Fergus, Rob},
+title = {{Visualizing and Understanding Convolutional Networks}},
+booktitle = {Computer Vision - ECCV 2014 - 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part I},
+year = {2014},
+editor = {Fleet, David J and Pajdla, Tom{\'a}s and Schiele, Bernt and Tuytelaars, Tinne},
+pages = {818--833},
+publisher = {Springer},
+annote = {a very popular and useful method for examining what a CNN learns.
+
+I think the method of deconvolution is better described in CS231n <http://cs231n.stanford.edu/slides/2016/winter1516_lecture9.pdf>. Essentially, we do backprop for all layers, except for ReLU, where negative diff is relu'ed (zeroed out).
+
+
+However, if you check the caffe for deep visualization toolbox, to see how deconv is done. <https://github.com/BVLC/caffe/compare/master...yosinski:deconv-deep-vis-toolbox>
+
+For LRN, it's ignored; for ReLU, it's another ReLU.
+
+In addition, it sets an example using visualization to guide architecture design. See Section 4.1. The "aliasing artifacts caused by the large stride..." actually means those blocky patterns in third panel of Figure 5 (it can be c or d depending whether you read label in the figure, or in the caption). Here, ther's only one (first row, second column). But in author's slides, there are more. It's from <http://videolectures.net/eccv2014_zeiler_convolutional_networks/>
+
+![comparison with alexnet](./deconv/comparison_with_alexnet.png)
+
+Fig. 5 is wrong. Check arxiv version (v3, Fig 6 there) <https://arxiv.org/pdf/1311.2901.pdf>.
+
+![correct fig 5](./deconv/arxiv_v3_fig6.png)
+
+Some details.
+
+End of Section 3, they say they normalize filter weight size. I don't think this is needed in general.
+},
+keywords = {classics, deep learning},
+doi = {10.1007/978-3-319-10590-1_53},
+language = {English},
+read = {Yes},
+rating = {5},
+date-added = {2017-02-16T19:50:02GMT},
+date-modified = {2017-03-27T00:55:38GMT},
+abstract = {Large Convolutional Network models have recently demonstrated impressive classification performance on the ImageNet benchmark Krizhevsky et al. [18]. However there is no clear understanding of why the},
+url = {http://dx.doi.org/10.1007/978-3-319-10590-1_53},
+local-url = {file://localhost/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2014/Zeiler/ECCV%202014%20Part%20I%202014%20Zeiler.pdf},
+file = {{ECCV 2014 Part I 2014 Zeiler.pdf:/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2014/Zeiler/ECCV 2014 Part I 2014 Zeiler.pdf:application/pdf}},
+uri = {\url{papers3://publication/doi/10.1007/978-3-319-10590-1_53}}
+}
+
+
+
+@article{Berkes:2006el,
+author = {Berkes, Pietro and Wiskott, Laurenz},
+title = {{On the Analysis and Interpretation of Inhomogeneous Quadratic Forms as Receptive Fields}},
+journal = {Neural Computation},
+year = {2006},
+volume = {18},
+number = {8},
+pages = {1868--1895},
+month = aug,
+annote = {I only read it upt to Section 5 (inlcuded), as I care more about visualization, not about statistical test.
+
+essential contributions.
+
+1. General methods to solve Eq. (4.1). That is, maximizing/minimizing a inhomogeneous quadratic form (which can model complex V1 cells), under a norm constraint.
+
+2. Eq. (5.5). given optimal stimulus, find the change of firing rate along all directions orthgonal to the direction of optimal stimulus (Eq. (5.10)). For a demo of this, see
+    * [Visualization of optimal stimuli and invariances 
+for Tiled Convolutional Neural Networks](http://ai.stanford.edu/{\textasciitilde}quocle/TCNNweb/)
+    * [original code](http://people.brandeis.edu/~berkes/software/qforms-tk/index.html)
+    * [Yimeng's implementation](https://github.com/leelabcnbc/tang-paper-2017/blob/master/neuron_fitting/debug/debug_hessian_visualization_complex_cell.ipynb)
+
+There are some errors and points note taking in the paper about the method.
+
+1. Above (5.8), we actually need to compute the null space of $x^+$ (N-1 vectors orthogonal to $x^+$). Check Quoc Le and my implementation on how to do this. Doing Gram-Schmidt on $x^+$ plus $e_1$ through $e_{N-1}$ doesn't necessarily give the correct result.
+2. As $x^+$ is local maxima, then you would expect along all directions, (5.5) gives you negative values. This is true, but eigenvalues of Eq. (5.8) are not all negative. Instead, you need to add back the offset term in Eq. (5.5). Then all offsetted eigenvalues are negative. Least negative ones are most invariant, and vice versa. Check original implmentation and Yimeng's implementation (`best_variance_and_invariance_directions `).
+3. Eq. (5.8) is simply computing the eigenvalues of H, along directions othorgonal to $x^+$. That is, they paramterize $w$ with $Bx$, $B$ being a $N$ by $N-1$ basis matrix, and $x$ being a $N-1$ vector. This justifies why using Eq. (5.9) to recover the original space.
+
+
+Some caveats
+
+For this to work, you need to 1) really find the optimal stimulus (at least some local maxima), and 2) compute the hessian correctly. Both are pretty difficult for a really complex neuron, say CNN.
+
+1) is either not very accurate, or it gives noise like input (from my experience, images that excite a aritifical neuron most are mostly noise like).
+2) is either theoretically impossbie (see <https://github.com/leelabcnbc/tang-paper-2017/blob/master/neuron_fitting/debug/debug_hessian_old_plus_adam_vs_lbfgs.ipynb>), or it takes so long to compute (say, using TensorFlow).
+
+Yimeng found that this method doesn't work well with really complex neurons. See <https://github.com/leelabcnbc/tang-paper-2017/blob/master/neuron_fitting/debug/cnn_fitting_debug_nonOT_visualize.ipynb>
+
+In the paper, they are not analyzing some fitted V1 cells. Instead, they are analzying some artificial units learned by Slow Feature Analysis. Check Section 2. According to Deep Learning book, SFA has closed form solution, so it can't be too complicated.
+
+
+Last paragraph of Section 4.  optimal x might not make sense or be relevant.
+
+> Note that although $x^+$ is the stimulus that elicits the strongest response in the function, it does not necessarily mean that it is representative of the class of stimuli that give the most important contribution to its output. This depends on the distribution of the input vectors.
+
+},
+publisher = {MIT Press 238 Main St., Suite 500, Cambridge, MA 02142-1046 USA journals-info@mit.edu},
+keywords = {V1},
+doi = {10.1162/neco.2006.18.8.1868},
+language = {English},
+read = {Yes},
+rating = {4},
+date-added = {2017-05-29T17:19:56GMT},
+date-modified = {2017-06-12T15:26:03GMT},
+abstract = {In this letter, we introduce some mathematical and numerical tools to analyze and interpret inhomogeneous quadratic forms. The resulting characterization is in some aspects similar to that given by experimental studies of cortical cells, making it particularly suitable for application to second-order approximations and theoretical models of physiological receptive fields. We first discuss two ways of analyzing a quadratic form by visualizing the coefficients of its quadratic and linear term directly and by considering the eigenvectors of its quadratic term. We then present an algorithm to compute the optimal excitatory and inhibitory stimuli{\textemdash}those that maximize and minimize the considered quadratic form, respectively, given a fixed energy constraint. The analysis of the optimal stimuli is completed by considering their invariances, which are the transformations to which the quadratic form is most insensitive, and by introducing a test to determine which of these are statistically significant. Next we prop...},
+url = {http://www.mitpressjournals.org/doi/10.1162/neco.2006.18.8.1868},
+local-url = {file://localhost/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2006/Berkes/Neural%20Computation%202006%20Berkes.pdf},
+file = {{Neural Computation 2006 Berkes.pdf:/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2006/Berkes/Neural Computation 2006 Berkes.pdf:application/pdf}},
+uri = {\url{papers3://publication/doi/10.1162/neco.2006.18.8.1868}}
+}
+
+
+
+@article{Szegedy:2013vw,
+author = {Szegedy, C and Zaremba, W and Sutskever, I and Bruna, J and Erhan, D and Goodfellow, I and Fergus, Rob},
+title = {{Intriguing properties of neural networks}},
+journal = {ArXiv e-prints},
+year = {2013},
+volume = {cs.CV},
+month = dec,
+annote = {Good analysis paper, showing that 1) at higher layers, units or mixture of units are roughtly the same. BUT, I'm not sure if this is still the case for networks with only one FC layer (only fc8, in AlexNet's term) 2) adversarial examples. Their root reason might be that each layer is not stable (Table 5).
+
+
+
+Section 4
+
+> a non-local generalization prior over the input space. In other words, it is assumed that is possible for the output unit to assign non- significant (and, presumably, non-epsilon) probabilities to regions of the input space that contain no training examples in their vicinity.
+
+this is also mentioned in DL book. DL models assumes some non-local prior.
+
+
+
+
+
+Section 4.1 here they assume images pixels have range 0 to 1, not 0-255.
+
+Here D(x,f(x)) should be x, not f(x). clearly f(x) doesn't makes dimension match.
+
+
+Here how they actually find an adversarial example. is really vague. It's explained more clearly in [Exploring the Space of Adversarial Images](https://arxiv.org/pdf/1510.05328.pdf)  (version 5 on ArXiv) with code at <https://github.com/tabacof/adversarial>. Later referred to "the 2015 paper". I copied relevant page in the notes.
+
+Essentially, you need to first select an wrong label l to fool the network, and then you start from a small C (this paper), or big C (the 2015 paper), and then surely you will find a somewhat big r that will satisfy that f(x+r)=l. Then you decrease C little by little, until that f(x+r) != l. This process will intuitively decrease r, yet biasing the r to those preserving f(x+r)=l. Intuitively makes sense. Not sure how good it is in theory.
+
+
+> This penalty function method would yield the exact solution for D(X,l) in the case of convex losses, however neural networks are non-convex in general, so we end up with an approximation in this case.
+
+I don't think this is right. At least I can't derive it using my RUBBISH note.
+
+
+
+======RUBBISH START======
+
+I don't understand the math of box-constrained L-BFGS. I think here it's using the correspondence between Constrained and Lagrange forms. See text around Eq. 5.7 and 5.8 of [Statistical Learning with Sparsity](https://trevorhastie.github.io/): "For convex programs, the Lagrangian allows for the constrained problem (5.5) to be solved by reduction to an equivalent unconstrained problem.", or page 16-17 of <http://www.stat.cmu.edu/{\textasciitilde}ryantibs/convexopt-S15/lectures/12-kkt.pdf>
+
+Here I would say the correspondence is loose. to make it more precise, we should modify the constraint f(x+r)=l in the first (original) problem to be something like loss(x+r,l)<0.001.
+
+Two problems, written as constrained form, and lagrange form, are
+
+1) constrained form.
+
+min |r|, s.t. loss(x+r,l) < \eps
+
+2) lagrange form
+
+min |r| + \lambda loss(x+r,l).
+
+First, we replace hard constraint f(x+r)=l with a more soft constraint using loss (I would say the paper is poorly written; no relationship between f and loss_f is mentioned).
+
+Then they also assume that, big eps correspond to small lambda, and small eps correspond to big lambda.    This assumption is also kind of assumed in Section 7.2 of Deep Learning book. Check my notes on that.
+
+======RUBBISH END======
+
+
+
+
+Section 4.2
+
+> A subtle, but essential detail is that we only got improvements by generating adversarial examples for each layer outputs which were used to train all the layers above. The network was trained in an alternating fashion, maintain- ing and updating a pool of adversarial examples for each layer separately in addition to the original training set.
+
+For adversarial example to be useful, you can't use input-level adversarial examples. Instead, you need intermediate adversarial examples. But this would really make training complicated.
+
+Section 4.3
+
+Not sure about the math about deriving operator norm of W when W is convolution. But whatever... Conclusion is important.},
+keywords = {deep learning, To Read},
+read = {Yes},
+rating = {4},
+date-added = {2017-03-29T19:52:30GMT},
+date-modified = {2017-03-30T14:48:37GMT},
+url = {http://arxiv.org/abs/1312.6199},
+local-url = {file://localhost/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2013/Szegedy/arXiv%202013%20Szegedy.pdf},
+file = {{arXiv 2013 Szegedy.pdf:/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2013/Szegedy/arXiv 2013 Szegedy.pdf:application/pdf}},
+uri = {\url{papers3://publication/uuid/C6374003-66D2-4059-941E-D3B1E4F50BBB}}
+}
+
+
+
+@article{Xu:2015ut,
+author = {Xu, Kevin and Ba, Jimmy Lei and Kiros, Ryan and Cho, Kyunghyun and Courville, Aaron and Salakhutdinov, Ruslan and Zemel, Richard S and Bengio, Yoshua},
+title = {{Show, Attend and Tell: Neural Image Caption Generation with Visual Attention}},
+journal = {ArXiv e-prints},
+year = {2015},
+volume = {cs.LG},
+month = feb,
+annote = {Great application of "attention" to image captioning.
+
+Notice that where to attend is not supervised, just like the case in CTC.
+
+CS231n says that one problem with this work is the resolution of attention. Maybe can be addressed using per pixel hypercolumn features, after upsampling.
+
+pp. 4.
+
+Check CS231n for the notation, notice that I think here T should be $T_{D+m+n, 4n}$.
+
+Section 4.1 Hard attention.
+
+This version is learned by maximizing lower bound. In Eq. (11), s is a vector of all choices along time. and to learn this, we need sampling.
+
+in pp.5, there are some further refinements on optimization. Maybe these are just some tricks in MCMC. anyway.
+
+Section 4.2 soft attention.
+
+pp. 6
+
+most of left column is about connection between soft and hard versions. Ignored.
+
+
+Section 4.2.1 Doubly Stochastic Attention.
+
+No idea why across time, the alpha should sum to 1 for each location. See <https://github.com/kelvinxu/arctic-captions/issues/38> and <https://www.reddit.com/r/MachineLearning/comments/2vjdcw/show_attend_and_tell_neural_image_caption/cok4yc9/>. Maybe it just worked, whatsoever.
+
+In addition, that \beta stuff might be some hack that emprically helps.
+
+},
+keywords = {deep learning, recurrent},
+read = {Yes},
+rating = {5},
+date-added = {2017-02-21T16:11:00GMT},
+date-modified = {2017-02-23T19:57:09GMT},
+url = {http://arxiv.org/abs/1502.03044},
+local-url = {file://localhost/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2015/Xu/arXiv%202015%20Xu.pdf},
+file = {{arXiv 2015 Xu.pdf:/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2015/Xu/arXiv 2015 Xu.pdf:application/pdf}},
+uri = {\url{papers3://publication/uuid/881D0A60-2E59-477D-814F-5E8908F34D89}}
+}
+
+
+
+@article{Zhang:2016ve,
+author = {Zhang, Chiyuan and Bengio, S and Hardt, M and Recht, B and Vinyals, Oriol},
+title = {{Understanding deep learning requires rethinking generalization}},
+journal = {ArXiv e-prints},
+year = {2016},
+volume = {cs.LG},
+month = nov,
+annote = {Just read the contributions should be fine. Essentially, many theories on generalization don't work on deep learning models.
+
+Eric Xing's comments on this paper, from his Facebook:
+
+Not surprisingly, most statistical learning theories on generalization errors cannot be applied on deep learning, and DL is actually not learning any patterns -- they are just memorizing the data.
+},
+keywords = {deep learning},
+read = {Yes},
+rating = {4},
+date-added = {2017-02-14T03:28:49GMT},
+date-modified = {2017-02-28T18:35:28GMT},
+url = {http://arxiv.org/abs/1611.03530},
+local-url = {file://localhost/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2016/Zhang/arXiv%202016%20Zhang.pdf},
+file = {{arXiv 2016 Zhang.pdf:/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2016/Zhang/arXiv 2016 Zhang.pdf:application/pdf}},
+uri = {\url{papers3://publication/uuid/D566AE84-4CA7-4A74-9FCB-637EA4CA0854}}
+}
+
+
+
+@inproceedings{Grauman:2005iu,
+author = {Grauman, Kristen and Darrell, Trevor},
+title = {{The pyramid match kernel: discriminative classification with sets of image features}},
+booktitle = {Tenth IEEE International Conference on Computer Vision (ICCV'05)},
+year = {2005},
+pages = {1458--1465},
+publisher = {IEEE},
+annote = {Great idea to compare two bags of features.
+
+Some details.
+
+In 3.3, the Mercer's condition is proved for K tilde, not K. But this should not matter, since we already get a \phi for K tilde (P), then we can define the \phi'(P) for K as \phi(P) / \sqrt{K tilde (P,P)}.},
+keywords = {classics},
+doi = {10.1109/ICCV.2005.239},
+isbn = {0-7695-2334-X},
+read = {Yes},
+rating = {5},
+date-added = {2017-02-15T04:36:31GMT},
+date-modified = {2017-02-17T20:20:26GMT},
+url = {http://ieeexplore.ieee.org/document/1544890/},
+local-url = {file://localhost/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2005/Grauman/ICCV%202005%202005%20Grauman.pdf},
+file = {{ICCV 2005 2005 Grauman.pdf:/Users/yimengzh/Documents/Papers3_revised/Library.papers3/Articles/2005/Grauman/ICCV 2005 2005 Grauman.pdf:application/pdf}},
+uri = {\url{papers3://publication/doi/10.1109/ICCV.2005.239}}
+}
