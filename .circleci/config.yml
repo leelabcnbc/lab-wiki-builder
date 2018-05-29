@@ -33,6 +33,8 @@ jobs:
     docker:
       - image: circleci/python:3.6.5
     steps:
+      - checkout:  # to resolve authentication issue.
+          path: /tmp/dump
       - attach_workspace:
           at: /home/circleci
       - deploy:
